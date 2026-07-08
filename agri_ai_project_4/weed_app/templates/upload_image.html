@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI Crop & Weed Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+    background: url("{% static 'images/detect-bg.jpg' %}");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+    
+
+   .container {
+    margin-top: 60px;
+    background: linear-gradient(135deg, #ffffff, #d4f1ff, #a6e3ff);
+    background-size: 400% 400%;
+    animation: gradientSlide 6s ease infinite;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Gradient sliding animation */
+@keyframes gradientSlide {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+
+        h2 {
+            background: linear-gradient(90deg, #2d572c, #4caf50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            animation: slideDown 1s ease;
+        }
+
+        h3 {
+            color: #2d572c;
+            border-left: 4px solid #28a745;
+            padding-left: 8px;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-top: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .images img {
+            max-height: 200px;
+            margin-right: 20px;
+            border: 3px solid #ccc;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .images img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .pred-box {
+            border: 2px dashed #28a745;
+            background: linear-gradient(135deg, #f1fdf4, #e2f9e7);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            box-shadow: inset 0 0 10px rgba(40, 167, 69, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .pred-box:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-upload {
+            background: linear-gradient(90deg, #28a745, #218838);
+            color: white;
+            font-weight: 500;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-upload:hover {
+            background: linear-gradient(90deg, #218838, #1e7e34);
+            box-shadow: 0 6px 18px rgba(33, 136, 56, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 15px;
+            background: rgba(45, 87, 44, 0.9); /* dark green footer */
+            color: #f1f1f1;
+            font-size: 14px;
+            border-radius: 0 0 12px 12px;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        @keyframes slideDown {
+            from {opacity: 0; transform: translateY(-30px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        @keyframes fadeInUp {
+            from {opacity: 0; transform: translateY(30px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+
+<div class="container col-md-8">
+    <h2 class="text-center">🌱 Upload Crop or Weed Image for AI Detection</h2>
+
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-upload">🚀 Upload and Predict</button>
+    </form>
+
+    {% if original_img %}
+        <div class="section">
+            <h3>Uploaded Images</h3>
+            <div class="images d-flex flex-wrap">
+                <div>
+                    <p><strong>Original Image</strong></p>
+                    <img src="{{ MEDIA_URL }}{{ original_img }}" alt="Original Image">
+                </div>
+                <div>
+                    <p><strong>Grayscale Image</strong></p>
+                    <img src="{{ MEDIA_URL }}{{ gray_img }}" alt="Grayscale Image">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Model Predictions</h3>
+            <div class="pred-box">
+                <ul>
+                    {% for model, pred in predictions.items %}
+                        <li><strong>{{ model }}</strong>: {{ pred }}</li>
+                    {% endfor %}
+                    <li><strong>ConvNeXt + RF</strong>: {{ deep_pred }}</li>
+                </ul>
+                <p><strong>Nearest/Final Answer:</strong> 
+                   <span class="text-success fw-bold">{{ final_pred }}</span>
+                </p>
+            </div>
+        </div>
+
+        {% if yolo_output %}
+            <div class="section">
+                <h3>YOLOv8 Detection Result</h3>
+                <img src="{{ yolo_output }}" alt="YOLOv8 Result" style="max-height: 250px; border: 2px solid #aaa; border-radius: 10px; transition: transform 0.3s;">
+                <p class="mt-2">
+                    <a href="{{ yolo_output }}" target="_blank" class="btn btn-sm btn-outline-success">⬇ Download YOLOv8 Output</a>
+                </p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div class="footer">
+    <p>🌾 Mansoor &copy; 2025 AI Agricultural System</p>
+</div>
+
+</body>
+</html>
