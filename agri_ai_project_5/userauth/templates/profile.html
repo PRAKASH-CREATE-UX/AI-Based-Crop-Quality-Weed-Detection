@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+            background-image: url("{% static 'images/profile-bg.jpg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+        }
+
+    .profile-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .about-title {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 600;
+        color:rgb(2, 23, 7);
+    }
+
+    .weed-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .weed-box:hover {
+        background-color: #e9f5e9;
+        transform: translateY(-5px);
+    }
+
+    .weed-box h5 {
+        color: #155724;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-card">
+    <h2>Welcome, {{ user.username }} 👋</h2>
+    <p>You are logged in successfully!</p>
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+    <a href="{% url 'upload_image' %}" class="btn btn-success btn-sm ms-2">Go to Weed Prediction</a>
+</div>
+
+<div class="container">
+    <h2 class="about-title">About CottonWeeds</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4">
+
+        {% comment %} Weed Info Boxes {% endcomment %}
+        <div class="col">
+            <div class="weed-box">
+                <h5>Carpetweed</h5>
+                <p>A low-growing, mat-forming weed commonly found in cotton fields, difficult to control due to its rapid spreading ability.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Crabgrass</h5>
+                <p>An aggressive grassy weed that thrives in disturbed soil, known for competing strongly with young cotton plants.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Eclipta</h5>
+                <p>Often called false daisy, Eclipta is a broadleaf weed affecting cotton productivity, particularly in moist soils.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Goosegrass</h5>
+                <p>A fast-spreading annual grass weed with a low rosette form, resistant to some herbicides used in cotton farming.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Morningglory</h5>
+                <p>This twining vine wraps around cotton plants, interfering with harvesting and lowering crop quality significantly.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Nutsedge</h5>
+                <p>Also known as nutgrass, this perennial weed reproduces via tubers and outcompetes cotton for water and nutrients.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Pricklysida</h5>
+                <p>A small-leaved weed with bristly stems, commonly found in southern cotton fields and difficult to control post-emergence.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Purslane</h5>
+                <p>A succulent broadleaf weed that grows in hot conditions, spreading easily and competing aggressively with cotton seedlings.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Ragweed</h5>
+                <p>This allergenic weed affects both health and agriculture, reducing cotton yields and contaminating harvests.</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="weed-box">
+                <h5>Spurrendanoda</h5>
+                <p>A spreading weed often mistaken for other broadleaf plants, it interferes with cotton canopy and competes for nutrients.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
